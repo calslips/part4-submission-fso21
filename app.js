@@ -5,9 +5,10 @@ const mongoose = require('mongoose');
 const blogsRouter = require('./controllers/blogs');
 const morgan = require('morgan');
 const config = require('./utils/config');
+const logger = require('./utils/logger');
 
 const mongoUrl = config.MONGODB_URI;
-console.log('Connecting to', mongoUrl);
+logger.info('Connecting to', mongoUrl);
 
 mongoose.connect(mongoUrl, {
   useNewUrlParser: true,
@@ -16,10 +17,10 @@ mongoose.connect(mongoUrl, {
   useCreateIndex: true
 })
   .then(() => {
-    console.log('Connected to MongoDB');
+    logger.info('Connected to MongoDB');
   })
   .catch((error) => {
-    console.error('Error connecting to MongoDB', error.message);
+    logger.error('Error connecting to MongoDB', error.message);
   });
 
 app.use(cors());
