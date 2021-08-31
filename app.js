@@ -3,7 +3,7 @@ const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
 const blogsRouter = require('./controllers/blogs');
-const morgan = require('morgan');
+const middleware = require('./utils/middleware');
 const config = require('./utils/config');
 const logger = require('./utils/logger');
 
@@ -25,9 +25,10 @@ mongoose.connect(mongoUrl, {
 
 app.use(cors());
 app.use(express.json());
-morgan.token('body', (req) => JSON.stringify(req.body));
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
+app.use(middleware.requestLogger);
 
 app.use('/api/blogs', blogsRouter);
+
+app.use(middleware.unknownEndpoint);
 
 module.exports = app;
