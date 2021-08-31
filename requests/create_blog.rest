@@ -8,3 +8,14 @@ Content-Type: application/json
   "url": "https://www.magickedawayblog.com/",
   "likes": 5
 }
+
+### unsuccessful POST req, unknown endpoint
+POST http://localhost:3003/api/blog
+Content-Type: application/json
+
+{
+  "title": "The Void",
+  "author": "unknown",
+  "url": "https://www.nothingness.org",
+  "likes": 0
+}
