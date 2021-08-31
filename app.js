@@ -4,8 +4,9 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const blogsRouter = require('./controllers/blogs');
 const morgan = require('morgan');
+const config = require('./utils/config');
 
-const mongoUrl = process.env.MONGODB_URI;
+const mongoUrl = config.MONGODB_URI;
 console.log('Connecting to', mongoUrl);
 
 mongoose.connect(mongoUrl, {
