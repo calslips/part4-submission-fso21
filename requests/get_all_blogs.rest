@@ -1,0 +1,2 @@
+### successful GET req of all blogs
+GET http://localhost:3003/api/blogs

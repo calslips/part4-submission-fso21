@@ -1,0 +1,10 @@
+### successful POST req of blog
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Magic",
+  "author": "Parry Hotter",
+  "url": "https://www.magickedawayblog.com/",
+  "likes": 5
+}
