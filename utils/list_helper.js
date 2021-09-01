@@ -33,34 +33,52 @@ const mostBlogs = (blogList) => {
     return null;
   }
 
-  const count = allBlogCount(blogList);
-  return authorWithHighestCount(count);
+  return countAll(blogList, 'blogs');
 };
 
-const allBlogCount = (blogList) => {
-  let authorsAndBlogCount = {};
+const mostLikes = (blogList) => {
+  if (blogList.length === 0) {
+    return null;
+  }
+
+  return countAll(blogList, 'likes');
+};
+
+// most-themed helpers: mostBlogs, mostLikes)
+
+const countAll = (blogList, fieldToCount) => {
+  let authorsAndCount = {};
+
   blogList.forEach((blog) => {
     let author = blog.author;
-    if (!authorsAndBlogCount[author]) {
-      authorsAndBlogCount[author] = 1;
-    } else {
-      authorsAndBlogCount[author] += 1;
+    if (fieldToCount === 'blogs') {
+      authorsAndCount[author]
+        ? authorsAndCount[author] += 1
+        : authorsAndCount[author] = 1;
+    } else if (fieldToCount === 'likes') {
+      authorsAndCount[author]
+        ? authorsAndCount[author] += blog[fieldToCount]
+        : authorsAndCount[author] = blog[fieldToCount];
     }
   });
-  return authorsAndBlogCount;
+
+  return authorWithHighestCount(authorsAndCount, fieldToCount);
 };
 
-const authorWithHighestCount = (allBlogCount) => {
+const authorWithHighestCount = (countTally, field) => {
   let highestCount = {};
-  for (let author in allBlogCount) {
+
+  for (let author in countTally) {
     if (!highestCount.author) {
       highestCount.author = author;
-      highestCount.blogs = allBlogCount[author];
-    } else if (allBlogCount[author] > highestCount.blogs) {
+      highestCount[`${field}`] = countTally[author];
+    }
+    if (countTally[author] > highestCount[`${field}`]) {
       highestCount.author = author;
-      highestCount.blogs = allBlogCount[author];
+      highestCount[`${field}`] = countTally[author];
     }
   }
+
   return highestCount;
 };
 
@@ -68,5 +86,6 @@ module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 };

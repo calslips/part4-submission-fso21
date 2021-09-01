@@ -133,3 +133,26 @@ describe('author with most blogs', () => {
     });
   });
 });
+
+describe('author with most total likes', () => {
+  test('of an empty blog list is null', () => {
+    const result = listHelper.mostLikes(emptyList);
+    expect(result).toBe(null);
+  });
+
+  test('of a single blog list is that blogs author and like count', () => {
+    const result = listHelper.mostLikes(singleBlogList);
+    expect(result).toEqual({
+      author: 'Robert C. Martin',
+      likes: 10
+    });
+  });
+
+  test('of a large list is the author with the highest combined likes', () => {
+    const result = listHelper.mostLikes(multiBlogList);
+    expect(result).toEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 17
+    });
+  });
+});
