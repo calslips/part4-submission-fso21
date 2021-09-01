@@ -110,3 +110,26 @@ describe('favorite blog', () => {
     });
   });
 });
+
+describe('author with most blogs', () => {
+  test('of an empty blog list is null', () => {
+    const result = listHelper.mostBlogs(emptyList);
+    expect(result).toBe(null);
+  });
+
+  test('of a single blog list is that blogs author with a count of 1', () => {
+    const result = listHelper.mostBlogs(singleBlogList);
+    expect(result).toEqual({
+      author: 'Robert C. Martin',
+      blogs: 1
+    });
+  });
+
+  test('of a large list is the author with the highest number of blogs', () => {
+    const result = listHelper.mostBlogs(multiBlogList);
+    expect(result).toEqual({
+      author: 'Robert C. Martin',
+      blogs: 3
+    });
+  });
+});
