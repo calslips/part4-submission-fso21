@@ -1,5 +1,5 @@
 const dummy = (blogs) => {
-  console.log(blogs);
+  blogs;
   return 1;
 };
 
@@ -12,7 +12,24 @@ const totalLikes = (blogList) => {
   return allLikes;
 };
 
+const favoriteBlog = (blogList) => {
+  if (blogList.length === 0) {
+    return null;
+  }
+
+  let fav = blogList.reduce((previousBlog, currentBlog) => {
+    if (currentBlog.likes > previousBlog.likes) {
+      return currentBlog;
+    }
+    return previousBlog;
+  });
+
+  let { title, author, likes } = fav;
+  return { title, author, likes };
+};
+
 module.exports = {
   dummy,
-  totalLikes
+  totalLikes,
+  favoriteBlog
 };
