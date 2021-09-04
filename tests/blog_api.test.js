@@ -77,6 +77,28 @@ test('unique identifier property named id exists', async () => {
   });
 });
 
+test('a blog can be added to the list', async () => {
+  const newBlog = {
+    title: 'A Random Blog',
+    author: 'Persimmon Tree',
+    url: 'http://www.fakerandomblog.com',
+    likes: 3
+  };
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/);
+
+  const newBlogList = await Blog.find({});
+  newBlogList.map((blog) => blog.toJSON());
+  expect(newBlogList).toHaveLength(initialBlogs.length + 1);
+
+  const titles = newBlogList.map((blog) => blog.title);
+  expect(titles).toContain('A Random Blog');
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
