@@ -30,7 +30,7 @@ Content-Type: application/json
   "likes": 1
 }
 
-### unsuccessful POST req, missing title
+### unsuccessful POST req, missing url
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
