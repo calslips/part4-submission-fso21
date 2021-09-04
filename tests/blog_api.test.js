@@ -115,6 +115,32 @@ test('likes property will default to 0 if missing', async () => {
   expect(newBlogList[newBlogList.length - 1]).toHaveProperty('likes', 0);
 });
 
+test('backend responds with status code 400 when title & url are missing', async () => {
+  const noTitleBlog = {
+    author: 'Schwan Fawn',
+    url: 'http://blog.donottitleme.com',
+    likes: 1
+  };
+
+  const noUrlBlog = {
+    title: 'Tales of the Lost URL',
+    author: 'Absent Mind',
+    likes: 7
+  };
+
+  await api
+    .post('/api/blogs')
+    .send(noTitleBlog)
+    .expect(400)
+    .expect('Content-Type', /application\/json/);
+
+  await api
+    .post('/api/blogs')
+    .send(noUrlBlog)
+    .expect(400)
+    .expect('Content-Type', /application\/json/);
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
