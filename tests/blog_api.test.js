@@ -92,11 +92,27 @@ test('a blog can be added to the list', async () => {
     .expect('Content-Type', /application\/json/);
 
   const newBlogList = await Blog.find({});
-  newBlogList.map((blog) => blog.toJSON());
   expect(newBlogList).toHaveLength(initialBlogs.length + 1);
 
   const titles = newBlogList.map((blog) => blog.title);
   expect(titles).toContain('A Random Blog');
+});
+
+test('likes property will default to 0 if missing', async () => {
+  const noLikesBlog = {
+    title: 'The Likely Unliked Blog',
+    author: 'Warm Swarm',
+    url: 'http://www.likednoteevenonce.com',
+  };
+
+  await api
+    .post('/api/blogs')
+    .send(noLikesBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/);
+
+  const newBlogList = await Blog.find({});
+  expect(newBlogList[newBlogList.length - 1]).toHaveProperty('likes', 0);
 });
 
 afterAll(() => {
