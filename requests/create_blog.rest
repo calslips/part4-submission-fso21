@@ -19,3 +19,23 @@ Content-Type: application/json
   "url": "https://www.nothingness.org",
   "likes": 0
 }
+
+### unsuccessful POST req, missing title
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "author": "Schwan Fawn",
+  "url": "http://blog.donottitleme.com",
+  "likes": 1
+}
+
+### unsuccessful POST req, missing title
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Tales of the Lost URL",
+  "author": "Absent Mind",
+  "likes": 7
+}
