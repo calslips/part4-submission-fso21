@@ -5,6 +5,19 @@ const app = require('../app');
 const api = supertest(app);
 const Blog = require('../models/blog');
 
+const nonExistingId = async () => {
+  const blog = new Blog({
+    title: 'Without a Trace',
+    author: 'Hera Ngone',
+    url: 'http://tempentry.com',
+    likes: 0
+  });
+  await blog.save();
+  await blog.remove();
+
+  return blog._id.toString();
+};
+
 const initialBlogs = [
   {
     title: 'React patterns',
@@ -131,14 +144,12 @@ test('backend responds with status code 400 when title & url are missing', async
   await api
     .post('/api/blogs')
     .send(noTitleBlog)
-    .expect(400)
-    .expect('Content-Type', /application\/json/);
+    .expect(400);
 
   await api
     .post('/api/blogs')
     .send(noUrlBlog)
-    .expect(400)
-    .expect('Content-Type', /application\/json/);
+    .expect(400);
 });
 
 test('deleting a blog with valid id results in status code 204', async () => {
@@ -165,6 +176,45 @@ test('attempt to delete a blog with invalid id results in status code 400', asyn
 
   const blogListAfter = await Blog.find({});
   expect(blogListAfter).toHaveLength(initialBlogs.length);
+});
+
+test('updating blog likes with valid id results in status code 200', async () => {
+  const startBlogs = await Blog.find({});
+  const oldBlog = startBlogs[0];
+  const updateLikes = {
+    likes: oldBlog.likes + 1
+  };
+
+  await api
+    .put(`/api/blogs/${oldBlog.id}`)
+    .send(updateLikes)
+    .expect(200)
+    .expect('Content-Type', /application\/json/);
+
+  const blogListAfter = await Blog.find({});
+  console.log(oldBlog);
+  console.log(blogListAfter[0]);
+  expect(blogListAfter[0].id).toBe(oldBlog.id);
+  expect(blogListAfter[0].likes).toBe(initialBlogs[0].likes + 1);
+});
+
+test('updating blog likes with invalid id results in status code 400', async () => {
+  const invalidId = '214mkfd329msdl21934d3d1';
+
+  await api
+    .put(`/api/blogs/${invalidId}`)
+    .send({ likes: 123 })
+    .expect(400);
+});
+
+test('updating blog likes with nonexisting id results in status code 404', async () => {
+  const validUnmatchedId = await nonExistingId();
+  console.log(validUnmatchedId);
+
+  await api
+    .put(`/api/blogs/${validUnmatchedId}`)
+    .send({ likes: 1 })
+    .expect(404);
 });
 
 afterAll(() => {
