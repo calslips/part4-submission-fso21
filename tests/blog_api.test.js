@@ -141,6 +141,32 @@ test('backend responds with status code 400 when title & url are missing', async
     .expect('Content-Type', /application\/json/);
 });
 
+test('deleting a blog with valid id results in status code 204', async () => {
+  const startBlogs = await Blog.find({});
+  const deleteBlog = startBlogs[0];
+
+  await api
+    .delete(`/api/blogs/${deleteBlog.id}`)
+    .expect(204);
+
+  const newBlogList = await Blog.find({});
+  expect(newBlogList).toHaveLength(initialBlogs.length - 1);
+
+  const titles = newBlogList.map((blog) => blog.title);
+  expect(titles).not.toContain(deleteBlog.title);
+});
+
+test('attempt to delete a blog with invalid id results in status code 400', async () => {
+  const invalidId = '214mkfd329msdl21934d3d1';
+
+  await api
+    .delete(`/api/blogs/${invalidId}`)
+    .expect(400);
+
+  const blogListAfter = await Blog.find({});
+  expect(blogListAfter).toHaveLength(initialBlogs.length);
+});
+
 afterAll(() => {
   mongoose.connection.close();
 });
