@@ -14,6 +14,8 @@ const errorHandler = (err, req, res, next) => {
     return res.status(400).send({ error: 'invalid id format' });
   } else if (err.name === 'ValidationError') {
     return res.status(400).json({ error: err.message });
+  } else if (err.name === 'JsonWebTokenError') {
+    return res.status(401).json({ error: 'invalid token' });
   }
 
   next(err);
