@@ -1,12 +1,46 @@
 ### successful POST req of blog
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer <replace with valid token>
 
 {
-  "title": "Magic",
-  "author": "Parry Hotter",
-  "url": "https://www.magickedawayblog.com/",
-  "likes": 5
+  "title": "The American Way",
+  "author": "Patriotic Patron",
+  "url": "https://www.nogripeswithstarsnstripes.com/",
+  "likes": 1776
+}
+
+# {
+#   "title": "Fried or Fertilized",
+#   "author": "Yung Humma",
+#   "url": "https://blog.howyoulikeyoureggs.com/",
+#   "likes": 100
+# }
+
+# {
+#   "title": "Hong Kong Phooey",
+#   "author": "Phoney Bologna",
+#   "url": "https://www.blogzilla.org/",
+#   "likes": 3
+# }
+
+# {
+#   "title": "Magic",
+#   "author": "Parry Hotter",
+#   "url": "https://www.magickedawayblog.com/",
+#   "likes": 5
+# }
+
+### unsuccessful POST req of blog, invalid token
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer <replace with bad token>
+
+{
+  "title": "Will Not Post",
+  "author": "Contrary Canary",
+  "url": "https://www.cantorwont.com/",
+  "likes": 0
 }
 
 ### unsuccessful POST req, unknown endpoint
