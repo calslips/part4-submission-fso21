@@ -4,6 +4,7 @@ const app = require('../app');
 
 const api = supertest(app);
 const Blog = require('../models/blog');
+const User = require('../models/user');
 
 const nonExistingId = async () => {
   const blog = new Blog({
@@ -54,6 +55,19 @@ const initialBlogs = [
     author: 'Robert C. Martin',
     url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
     likes: 2
+  }
+];
+
+const initialUsers = [
+  {
+    username: 'blogmasterblab',
+    name: 'Blabby Filet',
+    password: 'suchsecret'
+  },
+  {
+    username: 'kazakhing',
+    name: 'Borat Sagdiyev',
+    password: 'youllneverguessthis'
   }
 ];
 
@@ -215,6 +229,144 @@ test('updating blog likes with nonexisting id results in status code 404', async
     .put(`/api/blogs/${validUnmatchedId}`)
     .send({ likes: 1 })
     .expect(404);
+});
+
+describe('when creating a new user', () => {
+  beforeEach(async () => {
+    await User.deleteMany({});
+
+    for (let user of initialUsers) {
+      await api
+        .post('/api/users')
+        .send(user);
+    }
+  });
+
+  test('creation succeeds with a unique username', async () => {
+    const startUsers = await User.find({});
+
+    const newUser = {
+      username: 'flashbang',
+      name: 'Hardy Har',
+      password: 'peakaboo'
+    };
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    const endUsers = await User.find({});
+    expect(endUsers).toHaveLength(startUsers.length + 1);
+
+    const usernames = endUsers.map((user) => user.username);
+    expect(usernames).toContain(newUser.username);
+  });
+
+  test('creation fails with appropriate status code if username taken', async () => {
+    const startUsers = await User.find({});
+
+    const newUser = {
+      username: 'kazakhing',
+      name: 'Azamat Bagatov',
+      password: 'missedinborat2'
+    };
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/);
+
+    expect(result.body.error).toContain('`username` to be unique');
+
+    const endUsers = await User.find({});
+    expect(endUsers).toHaveLength(startUsers.length);
+
+    const names = endUsers.map((user) => user.name);
+    expect(names).not.toContain(newUser.name);
+  });
+
+  test('creation fails with appropriate status code if username length < 3', async () => {
+    const startUsers = await User.find({});
+
+    const newUser = {
+      username: 'no',
+      name: 'Always No',
+      password: 'noforall'
+    };
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/);
+
+    expect(result.body.error).toContain(`\`username\` (\`${newUser.username}\`) is shorter than the minimum allowed length (3)`);
+
+    const endUsers = await User.find({});
+    expect(endUsers).toHaveLength(startUsers.length);
+  });
+
+  test('creation fails with appropriate status code if username is missing', async () => {
+    const startUsers = await User.find({});
+
+    const newUser = {
+      username: '',
+      name: 'Nameless',
+      password: 'nopwfornoname'
+    };
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/);
+
+    expect(result.body.error).toContain('`username` is required');
+
+    const endUsers = await User.find({});
+    expect(endUsers).toHaveLength(startUsers.length);
+  });
+
+  test('creation fails with appropriate status code if password length < 3', async () => {
+    const startUsers = await User.find({});
+
+    const newUser = {
+      username: 'twoisenough',
+      name: 'Tutu O\'Toole',
+      password: '2t'
+    };
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/);
+
+    const endUsers = await User.find({});
+    expect(endUsers).toHaveLength(startUsers.length);
+  });
+
+  test('creation fails with appropriate status code if password is missing', async () => {
+    const startUsers = await User.find({});
+
+    const newUser = {
+      username: 'unsecured',
+      name: 'Naive Naomi',
+      password: ''
+    };
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/);
+
+    const endUsers = await User.find({});
+    expect(endUsers).toHaveLength(startUsers.length);
+  });
 });
 
 afterAll(() => {
