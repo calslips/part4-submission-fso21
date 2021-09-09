@@ -1,0 +1,27 @@
+### successful login
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+  "username": "blogmasterblab",
+  "password": "suchsecret"
+}
+
+### unsuccessful login, invalid password
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+  "username": "blogmasterblab",
+  "password": "iforgot"
+}
+
+### unsuccessful login, invalid user
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+  "username": "nonexistent",
+  "password": "forwhat"
+}
+
