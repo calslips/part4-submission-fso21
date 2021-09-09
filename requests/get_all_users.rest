@@ -1,0 +1,2 @@
+### successful GET req of all users
+GET http://localhost:3003/api/users

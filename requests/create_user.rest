@@ -1,0 +1,15 @@
+### successful POST req of a user
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+# {
+#   "username": "kazakhing",
+#   "name": "Borat Sagdiyev",
+#   "password": "youllneverguessthis"
+# }
+
+# {
+#   "username": "blogmasterblab",
+#   "name": "Blabby Filet",
+#   "password": "suchsecret"
+# }
