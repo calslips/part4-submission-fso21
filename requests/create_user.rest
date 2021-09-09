@@ -13,3 +13,53 @@ Content-Type: application/json
 #   "name": "Blabby Filet",
 #   "password": "suchsecret"
 # }
+
+### unsuccessful POST req of a user, nonunique username
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "blogmasterblab",
+  "name": "Blabby Filet",
+  "password": "suchsecret"
+}
+
+### unsuccessful POST req of a user, username too short
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "yo",
+  "name": "Yoko Ono",
+  "password": "seanjohn"
+}
+
+### unsuccessful POST req of a user, missing username
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "",
+  "name": "No Matter",
+  "password": "passedword"
+}
+
+### unsuccessful POST req of a user, password too short
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "flimflamflan",
+  "name": "La Flama Blanca",
+  "password": "kp"
+}
+
+### unsuccessful POST req of a user, missing password
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "nosecrets",
+  "name": "Honest Abe",
+  "password": ""
+}
