@@ -43,6 +43,17 @@ Authorization: Bearer <replace with bad token>
   "likes": 0
 }
 
+### unsuccessful POST req of blog, no token
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Will Not Post",
+  "author": "Contrary Canary",
+  "url": "https://www.cantorwont.com/",
+  "likes": 0
+}
+
 ### unsuccessful POST req, unknown endpoint
 POST http://localhost:3003/api/blog
 Content-Type: application/json
@@ -57,6 +68,7 @@ Content-Type: application/json
 ### unsuccessful POST req, missing title
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer <replace with valid token>
 
 {
   "author": "Schwan Fawn",
@@ -67,6 +79,7 @@ Content-Type: application/json
 ### unsuccessful POST req, missing url
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer <replace with valid token>
 
 {
   "title": "Tales of the Lost URL",
