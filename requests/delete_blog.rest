@@ -1,0 +1,10 @@
+### successful DELETE req of blog
+DELETE http://localhost:3003/api/blogs/<replace with id of blog to delete>
+Authorization: Bearer <replace with token of correct user>
+
+### unsuccessful DELETE req of blog, wrong user
+DELETE http://localhost:3003/api/blogs/613a72738dcf1d320bb74a12
+Authorization: Bearer <replace with token of wrong user>
+
+### unsuccessful DELETE req of blog, no token
+DELETE http://localhost:3003/api/blogs/613a72738dcf1d320bb74a12
