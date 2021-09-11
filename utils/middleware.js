@@ -29,7 +29,9 @@ const unknownEndpoint = (request, response) => {
 };
 
 const errorHandler = (err, req, res, next) => {
-  console.error(err.message);
+  if (process.env.NODE_ENV !== 'test') {
+    console.error(err.message);
+  }
 
   if (err.name === 'CastError') {
     return res.status(400).send({ error: 'invalid id format' });
