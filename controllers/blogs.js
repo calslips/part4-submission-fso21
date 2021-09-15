@@ -11,21 +11,23 @@ blogsRouter.get('/', async (request, response) => {
 });
 
 blogsRouter.post('/', retrieveUser, async (request, response) => {
-  const body = request.body;
+  const blog = new Blog(request.body);
 
-  const user = request.user;
+  blog.user = request.user;
 
-  const blog = new Blog({
-    title: body.title,
-    author: body.author,
-    url: body.url,
-    likes: body.likes,
-    user: user._id
-  });
+  // const user = request.user;
+
+  // const blog = new Blog({
+  //   title: body.title,
+  //   author: body.author,
+  //   url: body.url,
+  //   likes: body.likes,
+  //   user
+  // });
 
   const savedBlog = await blog.save();
-  user.blogs = user.blogs.concat(savedBlog._id);
-  await user.save();
+  blog.user.blogs = blog.user.blogs.concat(savedBlog._id);
+  await blog.user.save();
 
   response.status(201).json(savedBlog);
 });
